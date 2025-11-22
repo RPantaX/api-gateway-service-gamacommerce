@@ -57,6 +57,7 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
                                 .header("X-User-Id", validationResponse.getUserId().toString())
                                 .header("X-Username", validationResponse.getUsername())
                                 .header("X-User-Roles", String.join(",", validationResponse.getRoles()))
+                                .header("X-companyId", validationResponse.getCompanyId().toString())
                                 .build();
 
                         return chain.filter(exchange.mutate().request(modifiedRequest).build());
