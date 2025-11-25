@@ -51,13 +51,16 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
                                 return Mono.error(new RuntimeException("Insufficient privileges"));
                             }
                         }
-
+                        String companyId = null;
+                        if(validationResponse.getCompanyId() != null){
+                            companyId = validationResponse.getCompanyId().toString();
+                        }
                         // Mutar request con headers del usuario
                         ServerHttpRequest modifiedRequest = exchange.getRequest().mutate()
                                 .header("X-User-Id", validationResponse.getUserId().toString())
                                 .header("X-Username", validationResponse.getUsername())
                                 .header("X-User-Roles", String.join(",", validationResponse.getRoles()))
-                                .header("X-companyId", validationResponse.getCompanyId().toString())
+                                .header("X-companyId", companyId)
                                 .build();
 
                         return chain.filter(exchange.mutate().request(modifiedRequest).build());
