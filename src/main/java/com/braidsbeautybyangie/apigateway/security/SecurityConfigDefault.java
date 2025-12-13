@@ -13,7 +13,7 @@ public class SecurityConfigDefault {
     public CorsWebFilter corsFilter() {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
-        config.addAllowedOriginPattern("*"); // o "http://localhost:3000"
+        config.addAllowedOrigin("*"); // o "http://localhost:3000"
         config.addAllowedHeader("*");
         config.addAllowedMethod("*");
 

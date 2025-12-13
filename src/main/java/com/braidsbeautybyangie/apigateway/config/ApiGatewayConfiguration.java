@@ -36,12 +36,10 @@ public class ApiGatewayConfiguration {
                         .uri("lb://product-service"))
                 .route(p -> p.path("/v1/payment-service/**")
                         .uri("lb://payment-service"))
-                .route(p -> p.path("/v1/reservation-service/**")
-                        .filters(f -> f.filter(authenticationFilter.apply(new AuthenticationFilter.Config())))
-                        .uri("lb://reservation-service"))
                 .route(p -> p.path("/v1/credit-card/**")
                         .uri("lb://credit-card-processor-service"))
                 .route(p -> p.path("/v1/orders-service/**")
+                        .filters(f -> f.filter(authenticationFilter.apply(new AuthenticationFilter.Config("ROLE_ADMIN"))))
                         .uri("lb://orders-service"))
                 .build();
 
