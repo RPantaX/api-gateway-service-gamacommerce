@@ -5,6 +5,7 @@ import org.springframework.cloud.gateway.route.RouteLocator;
 import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 
 @Configuration
 public class ApiGatewayConfiguration {
@@ -31,8 +32,22 @@ public class ApiGatewayConfiguration {
                 .route(p -> p.path("/v1/user-service/employee/**")
                         .filters(f -> f.filter(authenticationFilter.apply(new AuthenticationFilter.Config("ROLE_ADMIN"))))
                         .uri("lb://user-service"))
-                .route(p -> p.path("/v1/product-service/**")
-                        .filters(f -> f.filter(authenticationFilter.apply(new AuthenticationFilter.Config("ROLE_ADMIN"))))
+                // PRODUCT SERVICE
+                .route(p -> p
+                        .path("/v1/product-service/**")
+                        .and()
+                        .method(HttpMethod.POST, HttpMethod.PUT, HttpMethod.DELETE)
+                        .filters(f -> f.filter(
+                                authenticationFilter.apply(
+                                        new AuthenticationFilter.Config("ROLE_ADMIN")
+                                )
+                        ))
+                        .uri("lb://product-service"))
+
+                .route(p -> p
+                        .path("/v1/product-service/**")
+                        .and()
+                        .method(HttpMethod.GET)
                         .uri("lb://product-service"))
                 .route(p -> p.path("/v1/payment-service/**")
                         .uri("lb://payment-service"))
